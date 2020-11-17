@@ -1,0 +1,28 @@
+<template>
+    <lightning-progress-indicator
+          current-step={currentStepName}
+          type="path">       
+        <lightning-progress-step
+            label="Account Information"
+            value="1" ></lightning-progress-step>
+
+        <lightning-progress-step
+            label="Contact Information"
+            value="2"></lightning-progress-step>
+
+        <lightning-progress-step
+            label="Opportunity Information"
+            value="3" ></lightning-progress-step>
+    </lightning-progress-indicator>
+    <template if:true={renderAccountScreen}>
+        <c-lwc-account-creation-screen onaccountcreateevent={handleAccountCreateEvent}></c-lwc-account-creation-screen>
+    </template>
+    <template if:true={renderContactScreen}>
+        <c-lwc-contact-creation-screen oncontactcreateevent={handleContactCreateEvent}></c-lwc-contact-creation-screen>
+            <!--account-industry-from-parent={accountIndustry} account-name-from-parent={accountNameSearch}-->
+    </template>
+    <template if:true={renderOpportunityScreen}>
+        <c-lwc-opportunity-creation-screen onopportunitycreateevent={handleOpportunityCreateEvent} ></c-lwc-opportunity-creation-screen>
+            <!--account-id-from-parent={accountId} contact-count-from-parent={contactCount}-->
+    </template>    
+</template>

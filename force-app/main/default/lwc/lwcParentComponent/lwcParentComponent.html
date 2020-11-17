@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Account Search" icon-name="standard:account">
+    </lightning-card>
+    <template if:true={renderSearch}>
+        <c-lwc-account-search onaccountsearchevent={handleAccountSearchEvent}></c-lwc-account-search>
+    </template>
+    <template if:true={renderAccountList}>
+        <c-lwc-account-list onaccountdetailevent={handleAccountDetailEvent} account-industry-from-parent={accountIndustry} account-name-from-parent={accountNameSearch}></c-lwc-account-list>
+    </template>
+    <template if:true={renderAccountDetail}>
+        <c-lwc-account-detail account-id-from-parent={accountId} contact-count-from-parent={contactCount}></c-lwc-account-detail>
+    </template>
+    <template if:true={renderContactList}>
+        <c-lwc-contact-list account-id-from-parent={accountId}></c-lwc-contact-list>
+    </template>
+</template>

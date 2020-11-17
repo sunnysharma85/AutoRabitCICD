@@ -1,0 +1,13 @@
+<template>
+    <lightning-record-edit-form record-id={accountId} object-api-name="Account" 
+    onerror={handleError} onsuccess={handleSuccess} onsubmit ={handleSubmit}>
+        <template for:each={accountFields} for:item="fld"> 
+        <lightning-input-field key={fld}  class="slds-size_1-of-2 slds-max-small-size_2-of-2 " field-name={fld}>
+
+        </lightning-input-field>
+        </template>                           
+    </lightning-record-edit-form>
+    <div class="slds-var-m-vertical_medium slds-align_absolute-center">  
+        <button type="submit" class="slds-button slds-button_brand" style="min-width: 320px;">Next</button>
+    </div>    
+</template>

@@ -1,0 +1,5 @@
+<aura:component implements="force:appHostable">
+    <body aura:id="content">
+    	<h1>Second  Component</h1>
+    </body>
+</aura:component>

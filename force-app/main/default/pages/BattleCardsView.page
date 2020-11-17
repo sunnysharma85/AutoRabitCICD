@@ -1,0 +1,246 @@
+<apex:page controller="BattleCardsPracticeViewController" title="Battle Cards" sidebar="true"><!-- tabstyle="Battle_Cards__tab" -->
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <apex:stylesheet value="{!URLFOR($Resource.slds, 'assets/styles/salesforce-lightning-design-system.css')}" />
+    
+        <style>
+            .sf1List {
+                    margin: 0;
+                    display: list-item;
+                    padding: 12px;
+                    border-bottom: solid 1px #cfd4d9;
+                    list-style: none;
+                    font-size: 14px;
+                    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                    color: rgb(60, 61, 62);
+                }
+                 
+                .sf1List:first-child {
+                    border-radius:4px 4px 0px 0px;
+                }
+                 
+                .sf1List:last-child {
+                    border-radius:0px 0px 4px 4px;
+                    border-bottom:none;
+                }
+                 
+                ol {
+                    background-color:rgb(248,248,248);
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    margin-top:5px;
+                    border-radius:4px;
+                    border:solid 1px #cfd4d9;
+                }
+                 
+                .sf1List a {
+                    text-decoration: none;
+                    color: rgb(60, 61, 62);
+                }
+                .titleText {
+                    color:#666666;
+                }
+                .hrefText {
+                    color:rgb(0, 112, 210) !important;
+                }
+                
+                .boldFont {
+                    font-weight: strong;
+                }
+                .childTableBackground {
+                    background-color:#fffaf9;
+                    font-size:12px;
+                }
+				.apexp{
+					padding-top: 100px;
+				}
+				.paraClass {
+					line-height: 150%;
+				}
+				td { padding: 5px; }
+            </style>
+    
+    <apex:form id="formId">
+        <apex:outputPanel id="panelClassic"  rendered="{!$User.UIThemeDisplayed == 'Theme3'}" >
+            <div style="position: absolute;">
+                <div style="position: relative; top: 5px; float:left;left: 10px;">
+                    <h1>Battle Cards</h1>
+                </div>
+    
+    <div style="position: relative; top: 45px; float:left;left: 100px;">
+        <apex:outputLabel value="Offering Level 1: " style="display:block;font-weight:bold"/> 
+        <apex:inputField value="{!objContentVersion.Offering_Leve_1__c}" style="width:200px;"/>
+    </div>
+	<div style="position: relative; top: 45px; float:left;left: 120px;">
+        <apex:outputLabel value="Offering Level 2: " style="display:block;font-weight:bold"/>
+        <!--apex:selectList size="1" value="{!selectedOffering}">
+            <apex:selectOptions value="{!OfferingList}"/>
+            <apex:actionSupport event="onchange" reRender="battlecards" status="waitStatus" action="{!fetchSelectedOfferingBattleCards}" />
+        </apex:selectList-->
+        <apex:inputField value="{!objContentVersion.Offering_Leve_2__c}" style="width:180px;"/>
+    </div>
+	<div style="position: relative; top: 45px; float:left;left: 140px;">
+        <apex:outputLabel value="Offering Level 3: " style="display:block;font-weight:bold"/> 
+        <apex:inputField value="{!objContentVersion.Offering_Leve_3__c}" style="width:120px;"/>&nbsp;&nbsp;
+        <apex:commandButton action="{!fetchSelectedOfferingBattleCards}" title="Search" value="Search" reRender="formId"/>
+    </div>                
+</div>
+            <apex:pageblock id="battlecards">
+                
+                <apex:pageblocktable value="{!lstPracticeValues}" var="lPV">
+                    <apex:column >
+                        <apex:facet name="header">Battle Cards by Offerings</apex:facet>
+                        <a href="javascript:;" title="{!lPV}" onclick="fetchPracticeFiles('{!lPV}');" style="display:{!if(strSelectedPractice != lPV, '','none;')}">
+                            <img src="/servlet/servlet.FileDownload?file=01546000000Vn6k" style="width:15px;"/><span class="hrefText">{!lPV}</span>
+                        </a>
+                        <a href="javascript:;" title="{!lPV}" onclick="closePracticeData('{!lPV}');" style="display:{!if(strSelectedPractice == lPV, '','none;')}">
+                            <img src="/servlet/servlet.FileDownload?file=01546000000Vn6p" style="width:15px;"/><span class="hrefText">{!lPV}</span>
+                        </a>
+                        <apex:outputPanel id="panelIdClassic">
+                            <apex:outputPanel ><!-- rendered="{if(lPV == strSelectedPractice && isShowSection,true,false)}" -->
+                                
+                                <apex:pageblocktable rowClasses="childTableBackground" value="{!lstContentVersion}" var="lCV" rendered="{!if(lPV == strSelectedPractice && strSelectedPractice != null && isShowSection && lstContentVersion.size > 0, true, false)}">
+                                    <br/>
+                                    <apex:column >
+                                        <apex:facet name="header">Card Name</apex:facet>
+                                        <apex:outputLink styleclass="hrefText" value="/sfc/servlet.shepherd/version/download/{!lCV.Id}" title="{!lCV.Title}">{!lCV.Title}</apex:outputLink>
+                                    </apex:column>
+                                    <!--apex:column value="{!lCV.Offering_Leve_2__c}">
+                                        <apex:facet name="header">Offering Level 2</apex:facet>
+                                    </apex:column>
+                                    <apex:column value="{!lCV.Offering_Leve_3__c}">
+                                        <apex:facet name="header">Offering Level 3</apex:facet>
+                                    </apex:column>
+                                    <apex:column value="{!lCV.Offering_Leve_4__c}">
+                                        <apex:facet name="header">Offering Level 4</apex:facet>
+                                    </apex:column-->
+                                    <apex:column value="{!lCV.Offering_Level_Tagged_Value__c}">
+                                            <apex:facet name="header">Offering Tagged</apex:facet>
+                                        </apex:column>
+                                </apex:pageblocktable>
+                                
+                                <apex:outputText rendered="{!if(lPV == strSelectedPractice && isShowSection && strSelectedPractice != null && lstContentVersion.size == 0, true,false)}" 
+                                    value="Battle cards not available for {!strSelectedPractice}">
+                                    <br/>
+                                </apex:outputText>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:column>
+                </apex:pageblocktable>
+            </apex:pageblock>
+        </apex:outputPanel>
+        <apex:outputPanel id="panelMobile" rendered="{!$User.UIThemeDisplayed != 'Theme3'}">
+			<h1 style="font-size:18px">Battle Cards</h1>
+            <body>
+				<!-- Filters Section -->
+                <apex:outputPanel id="showFiltersPanel" rendered="{!if(showFilters && !isSearchComplete, true,false)}">
+					<table>
+						<tr>
+							<td>
+								<apex:outputLabel value="Offering Level 1: " style="font-weight:bold;" /><br/>
+								<apex:inputField value="{!objContentVersion.Offering_Leve_1__c}"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<apex:outputLabel value="Offering Level 2: " style="font-weight:bold;" /><br/>
+								<apex:inputField value="{!objContentVersion.Offering_Leve_2__c}"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<apex:outputLabel value="Offering Level 3: " style="font-weight:bold;" /><br/>
+								<apex:inputField value="{!objContentVersion.Offering_Leve_3__c}"/>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>
+								<apex:commandbutton value="Search" action="{!fetchSelectedOfferingBattleCards}" rerender="panelMobile" status="waitStatus"/>
+							</td>
+						</tr>
+					</table>
+					<!--
+                	<apex:outputLabel value="Offering Level 1: " style="font-weight:bold;" /><br/>
+					<apex:inputField value="{!objContentVersion.Offering_Leve_1__c}"/><br/>
+                	<apex:outputLabel value="Offering Level 2: " style="font-weight:bold;" /><br/>
+					<apex:inputField value="{!objContentVersion.Offering_Leve_2__c}"/><br/>
+                	<apex:outputLabel value="Offering Level 3: " style="font-weight:bold;" /><br/>
+					<apex:inputField value="{!objContentVersion.Offering_Leve_3__c}"/><br/><br/>
+					<apex:commandbutton value="Search" action="{!fetchSelectedOfferingBattleCards}" rerender="panelMobile" status="waitStatus"/>
+					-->
+                </apex:outputPanel>
+                <apex:outputPanel id="showSearchPanel" rendered="{!if(!showFilters && !isSearchComplete, true, false)}">
+                    <apex:commandbutton value="Show Filters" action="{!displayFilters}" rerender="panelMobile" status="waitStatus"/>
+                </apex:outputPanel>
+				
+				<!-- Clear Filters Section -->
+				<apex:outputPanel id="showClearPanel" rendered="{!if(showFilters && isSearchComplete, true, false)}">
+					<apex:outputText value="{!strSearchCriteria}"/><br/>
+					<apex:commandbutton value="Clear Filters" action="{!clearFilters}" rerender="panelMobile" status="waitStatus"/>&nbsp;
+					<apex:commandbutton value="Show Filters" action="{!displayFilters}" rerender="panelMobile" status="waitStatus"/>
+				</apex:outputPanel>
+				<apex:outputText rendered="{!if(showFilters && isSearchComplete && lstPracticeValues.size == 0, true,false)}" value="Battle cards not available for search criteria."><br/>
+                </apex:outputText>
+				<apex:outputPanel rendered="{!lstPracticeValues.size != 0}">
+                <ol>
+                    <apex:repeat value="{!lstPracticeValues}" var="lPV">
+                        <li class="sf1List">
+                            <a href="javascript:;" title="{!lPV}" onclick="fetchPracticeFiles('{!lPV}');" style="display:{!if(strSelectedPractice != lPV, '','none;')}">
+                                <img src="/servlet/servlet.FileDownload?file=01546000000Vn6k" style="width:15px;"/><span class="hrefText">{!lPV}</span>
+                            </a>
+                            <a href="javascript:;" title="{!lPV}" onclick="closePracticeData('{!lPV}');" style="display:{!if(strSelectedPractice == lPV, '','none;')}">
+                                <img src="/servlet/servlet.FileDownload?file=01546000000Vn6p" style="width:15px;"/><span class="hrefText">{!lPV}</span>
+                            </a>
+                            <apex:outputPanel id="panelId" style="background-color:white">
+                                    <br/>
+                                    <apex:dataTable value="{!lstContentVersion}" var="lCV" styleClass="slds-table slds-table--bordered slds-table--fixed-layout" rendered="{!if(lPV == strSelectedPractice && strSelectedPractice != null && isShowSection && lstContentVersion.size > 0, true, false)}">
+                                        <apex:column >
+                                            <apex:facet name="header"><b>Card Name</b></apex:facet>
+                                            <apex:outputLink styleclass="hrefText" value="/sfc/servlet.shepherd/version/download/{!lCV.Id}" title="{!lCV.Title}">{!lCV.Title}</apex:outputLink>
+                                        </apex:column>
+                                        <!--apex:column value="{!lCV.Offering_Leve_2__c}">
+                                            <apex:facet name="header">Offering Level 2</apex:facet>
+                                        </apex:column>
+                                        <apex:column value="{!lCV.Offering_Leve_3__c}">
+                                            <apex:facet name="header">Offering Level 3</apex:facet>
+                                        </apex:column>
+                                        <apex:column value="{!lCV.Offering_Leve_4__c}">
+                                            <apex:facet name="header">Offering Level 4</apex:facet>
+                                        </apex:column-->
+                                        <apex:column value="{!lCV.Offering_Level_Tagged_Value__c}">
+                                            <apex:facet name="header">Offering Tagged</apex:facet>
+                                        </apex:column>
+                                    </apex:dataTable>
+
+                                    <apex:outputText rendered="{!if(lPV == strSelectedPractice && isShowSection && strSelectedPractice != null && lstContentVersion.size == 0, true,false)}" value="Battle cards not available for {!strSelectedPractice}">
+                                        <br/>
+                                    </apex:outputText>
+									
+									
+                                </apex:outputPanel>
+                        </li>
+                    </apex:repeat>
+                </ol>
+				
+				</apex:outputPanel>
+            </body>
+            
+            </apex:outputPanel>
+            <apex:actionFunction name="fetchPracticeFiles" action="{!fetchPracticeData}" reRender="formId" status="waitStatus">
+                <apex:param name="fParam" value="" assignTo="{!strSelectedPractice}"/>
+            </apex:actionFunction>
+            <apex:actionFunction name="closePracticeData" action="{!closePracticeData}" reRender="formId" status="waitStatus">
+            </apex:actionFunction>
+        <apex:actionFunction name="fetchSelectedOfferingBattleCards" action="{!fetchPracticeData}" reRender="formId" status="waitStatus">
+                <apex:param name="fParam" value="" assignTo="{!strSelectedPractice}"/>
+            </apex:actionFunction>
+            <apex:actionStatus id="waitStatus" style="align:center;">     
+                <apex:facet name="start">
+                    <apex:image value="/img/loading.gif" title="Processing..."/>
+                </apex:facet>
+                <apex:facet name="stop"></apex:facet>
+            </apex:actionStatus>
+        </apex:form>
+    </html>
+</apex:page>

@@ -1,0 +1,138 @@
+<apex:page controller="BattleCardsPracticeViewController" title="Battle Cards" sidebar="true"><!-- tabstyle="Battle_Cards__tab" -->
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <apex:stylesheet value="{!URLFOR($Resource.slds, 'assets/styles/salesforce-lightning-design-system.css')}" />
+    
+        <style>
+            .sf1List {
+                    margin: 0;
+                    display: list-item;
+                    padding: 12px;
+                    border-bottom: solid 1px #cfd4d9;
+                    list-style: none;
+                    font-size: 14px;
+                    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                    color: rgb(60, 61, 62);
+                }
+                 
+                .sf1List:first-child {
+                    border-radius:4px 4px 0px 0px;
+                }
+                 
+                .sf1List:last-child {
+                    border-radius:0px 0px 4px 4px;
+                    border-bottom:none;
+                }
+                 
+                ol {
+                    background-color:rgb(248,248,248);
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    margin-top:5px;
+                    border-radius:4px;
+                    border:solid 1px #cfd4d9;
+                }
+                 
+                .sf1List a {
+                    text-decoration: none;
+                    color: rgb(60, 61, 62);
+                }
+                .titleText {
+                    color:#666666;
+                }
+                .hrefText {
+                    color:rgb(0, 112, 210) !important;
+                }
+                
+                .boldFont {
+                    font-weight: strong;
+                }
+                .childTableBackground {
+                    background-color:#fffaf9;
+                    font-size:12px;
+                }
+            </style>
+    
+    <apex:form id="formId">
+        <apex:outputPanel id="panelClassic"  rendered="{!$User.UIThemeDisplayed == 'Theme3'}" >
+            <apex:sectionheader title="Battle Cards"/>
+            <apex:pageblock >
+                <apex:pageblocktable value="{!lstPracticeValues}" var="lPV">
+                    <apex:column >
+                        <apex:facet name="header">Battle Cards by Offerings</apex:facet>
+                        <a href="javascript:;" title="{!lPV}" onclick="fetchPracticeFiles('{!lPV}');" style="display:{!if(strSelectedPractice != lPV, '','none;')}">
+                            <img src="/servlet/servlet.FileDownload?file=01546000000Vn6k" style="width:15px;"/><span class="hrefText">{!lPV}</span>
+                        </a>
+                        <a href="javascript:;" title="{!lPV}" onclick="closePracticeData('{!lPV}');" style="display:{!if(strSelectedPractice == lPV, '','none;')}">
+                            <img src="/servlet/servlet.FileDownload?file=01546000000Vn6p" style="width:15px;"/><span class="hrefText">{!lPV}</span>
+                        </a>
+                        <apex:outputPanel id="panelIdClassic">
+                            <apex:outputPanel ><!-- rendered="{if(lPV == strSelectedPractice && isShowSection,true,false)}" -->
+                                
+                                <apex:pageblocktable rowClasses="childTableBackground" value="{!lstContentVersion}" var="lCV" rendered="{!if(lPV == strSelectedPractice && strSelectedPractice != null && isShowSection && lstContentVersion.size > 0, true, false)}">
+                                    <br/>
+                                    <apex:column >
+                                        <apex:outputLabel style="font-weight: bold;">Card Name:</apex:outputLabel>&nbsp;&nbsp; <apex:outputLabel ><apex:outputLink styleclass="hrefText" value="/sfc/servlet.shepherd/version/download/{!lCV.Id}" title="{!lCV.Title}">{!lCV.Title}</apex:outputLink></apex:outputLabel><br/>
+                                        <apex:outputLabel style="font-weight: bold;">Offering Level 2:</apex:outputLabel>&nbsp;&nbsp; {!lCV.Offering_Leve_2__c}<br/>
+                                        <apex:outputLabel style="font-weight: bold;">Offering Level 3:</apex:outputLabel>&nbsp;&nbsp; {!lCV.Offering_Leve_3__c}<br/>
+                                        <apex:outputLabel style="font-weight: bold;">Offering Level 4:</apex:outputLabel>&nbsp;&nbsp; {!lCV.Offering_Leve_4__c}                                        </apex:column>
+                                   
+                                </apex:pageblocktable>
+                                
+                                <apex:outputText rendered="{!if(lPV == strSelectedPractice && isShowSection && strSelectedPractice != null && lstContentVersion.size == 0, true,false)}" 
+                                    value="Battle cards not available for {!strSelectedPractice}">
+                                    <br/>
+                                </apex:outputText>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:column>
+                </apex:pageblocktable>
+            </apex:pageblock>
+        </apex:outputPanel>
+        <apex:outputPanel id="panelMobile" rendered="{!$User.UIThemeDisplayed != 'Theme3'}">
+            <h1 style="font-size:18px">Battle Cards by Offerings</h1>
+            <body>
+                <ol>
+                    <apex:repeat value="{!lstPracticeValues}" var="lPV">
+                        <li class="sf1List">
+                            <a href="javascript:;" title="{!lPV}" onclick="fetchPracticeFiles('{!lPV}');" style="display:{!if(strSelectedPractice != lPV, '','none;')}">
+                                <img src="/servlet/servlet.FileDownload?file=01546000000Vn6k" style="width:15px;"/><span class="hrefText">{!lPV}</span>
+                            </a>
+                            <a href="javascript:;" title="{!lPV}" onclick="closePracticeData('{!lPV}');" style="display:{!if(strSelectedPractice == lPV, '','none;')}">
+                                <img src="/servlet/servlet.FileDownload?file=01546000000Vn6p" style="width:15px;"/><span class="hrefText">{!lPV}</span>
+                            </a>
+                            <apex:outputPanel id="panelId" style="background-color:white">
+                                    <br/>
+                                    <apex:dataTable value="{!lstContentVersion}" var="lCV" styleClass="slds-table slds-table--bordered slds-table--fixed-layout" rendered="{!if(lPV == strSelectedPractice && strSelectedPractice != null && isShowSection && lstContentVersion.size > 0, true, false)}">
+                                        <apex:column >
+                                        <apex:outputLabel style="font-weight: bold;">Card Name:</apex:outputLabel>&nbsp;&nbsp; <apex:outputLabel ><apex:outputLink styleclass="hrefText" value="/sfc/servlet.shepherd/version/download/{!lCV.Id}" title="{!lCV.Title}">{!lCV.Title}</apex:outputLink></apex:outputLabel><br/>
+                                        <apex:outputLabel style="font-weight: bold;">Offering Level 2:</apex:outputLabel>&nbsp;&nbsp; {!lCV.Offering_Leve_2__c}<br/>
+                                        <apex:outputLabel style="font-weight: bold;">Offering Level 3:</apex:outputLabel>&nbsp;&nbsp; {!lCV.Offering_Leve_3__c}<br/>
+                                        <apex:outputLabel style="font-weight: bold;">Offering Level 4:</apex:outputLabel>&nbsp;&nbsp; {!lCV.Offering_Leve_4__c}    
+                                    </apex:column>
+                                    </apex:dataTable>
+
+                                    <apex:outputText rendered="{!if(lPV == strSelectedPractice && isShowSection && strSelectedPractice != null && lstContentVersion.size == 0, true,false)}" value="Battle cards not available for {!strSelectedPractice}">
+                                        <br/>
+                                    </apex:outputText>
+                                </apex:outputPanel>
+                        </li>
+                    </apex:repeat>
+                </ol>
+            </body>
+            
+            </apex:outputPanel>
+            <apex:actionFunction name="fetchPracticeFiles" action="{!fetchPracticeData}" reRender="formId" status="waitStatus">
+                <apex:param name="fParam" value="" assignTo="{!strSelectedPractice}"/>
+            </apex:actionFunction>
+            <apex:actionFunction name="closePracticeData" action="{!closePracticeData}" reRender="formId" status="waitStatus">
+            </apex:actionFunction>
+            <apex:actionStatus id="waitStatus" style="align:center;">     
+                <apex:facet name="start">
+                    <apex:image value="/img/loading.gif" title="Processing..."/>
+                </apex:facet>
+                <apex:facet name="stop"></apex:facet>
+            </apex:actionStatus>
+        </apex:form>
+    </html>
+</apex:page>

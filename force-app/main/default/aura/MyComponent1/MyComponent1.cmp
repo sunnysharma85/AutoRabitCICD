@@ -1,0 +1,11 @@
+<aura:component access="global" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:registerevent name="NavigatetoC2" type="force:navigateToComponent"/> 
+<pre>
+ 
+Hit the below button to go to component 2 <br/>
+ 
+</pre>
+ 
+<lightning:button variant="brand" label="Go to Component 2" onclick="{!c.NavigatetoC2}" />
+ 
+</aura:component>

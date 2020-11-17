@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="Search Account">
+        <lightning-input label="Account Name" 
+                        placeholder="Search By Name" 
+                        value={accName} 
+                        onchange={handleAccountNameChange}>
+        </lightning-input>
+        <template if:true={IndustryPicklistValues.data}>
+            <lightning-combobox label="Industry"
+                                value={industryValue}
+                                placeholder="-Select-"
+                                options={IndustryPicklistValues.data.values}
+                                onchange={handleIndustryChange}>
+            </lightning-combobox>
+        </template>
+        <lightning-button-group>
+            <lightning-button label="Search" 
+                            title="Search Accounts" 
+                            onclick={handleSearch} 
+                            class="slds-m-left_x-small">
+            </lightning-button>
+        </lightning-button-group>
+    </lightning-card>
+</template>

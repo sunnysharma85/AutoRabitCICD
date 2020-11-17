@@ -1,0 +1,143 @@
+<apex:page controller="BattleCardsPracticeViewController" sidebar="true" title="Battle Cards">
+	<html>
+	    <head>
+	        <title>
+	            Battle Cards
+	        </title>
+	    </head>
+	    <style>
+		    .sf1List {
+				margin: 0;
+				display: list-item;
+				padding: 4px;
+            /*border-bottom: solid 1px #cfd4d9;*/
+				list-style: none;
+				font-size: 16px;
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				color: rgb(60, 61, 62);
+			}
+			 
+			.sf1List:first-child {
+				border-radius:4px 4px 0px 0px;
+			}
+			 
+			.sf1List:last-child {
+				border-radius:0px 0px 4px 4px;
+				border-bottom:none;
+			}
+			 
+			ol {
+            /*background-color:#f0f0f0;*/
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				margin-top:5px;
+				border-radius:4px;
+            /*border:solid 1px #cfd4d9;*/
+			}
+			
+			.sf1OlChild {
+				background-color: rgb(248,248,248);
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				margin-top:5px;
+				border-radius:4px;
+				border:solid 1px #cfd4d9;
+			}
+			 
+			.sf1List a {
+				text-decoration: none;
+				color: rgb(60, 61, 62);
+			}
+			
+			.sf1ListChild {
+				margin: 5px;
+				display: list-item;
+				padding: 14px;
+				border-bottom: solid 1px #cfd4d9;
+				list-style: none;
+				font-size: 15px;
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				color: rgb(60, 61, 62);
+			}
+			 
+			.sf1ListChild:first-child {
+				border-radius:4px 4px 0px 0px;
+			}
+			 
+			.sf1ListChild:last-child {
+				border-radius:0px 0px 4px 4px;
+				border-bottom:none;
+			}
+			.sf1ListChild a {
+				text-decoration: none;
+				color: rgb(60, 61, 62);
+			}
+			
+			.titleText {
+			    color:#666666;
+			    font-weight:bold;
+			}
+			.hrefText {
+			    color:#668cff !important;
+			}
+			.boldText {
+				font-weight:bold;
+			}
+	    </style>
+	    <apex:form id="formId">
+	    	<body>
+	    		<h1 style="font-size:18px">Battle Cards By Practice</h1>
+	   			<ol>
+	    			<apex:repeat value="{!lstPracticeValues}" var="lPV">
+	        			<li class="sf1List">
+	        				<a href="javascript:;" title="{!lPV}" onclick="fetchPracticeFiles('{!lPV}');" style="display:{!if(strSelectedPractice != lPV, '','none;')}">
+		                		<span class="hrefText">{!lPV}</span>
+		            		</a>
+		            		<a href="javascript:;" title="{!lPV}" onclick="closePracticeData('{!lPV}');" style="display:{!if(strSelectedPractice == lPV, '','none;')}">
+		                		<span class="hrefText">{!lPV}</span>
+		            		</a>
+		            		<apex:outputPanel id="panelId" rendered="{!if(lPV == strSelectedPractice && strSelectedPractice != null && isShowSection && lstContentVersion.size > 0, true, false)}">
+			            		<ol class="sf1OlChild"><apex:repeat value="{!lstContentVersion}" var="lCV">
+			            			<li class="sf1ListChild">
+			            				<table>
+							                <tr>
+							                    <td class="titleText">Card Name
+								                </td>
+	                							<td>
+	           										<a href="/sfc/servlet.shepherd/version/download/{!lCV.Id}" title="{!lCV.Title}">
+	                									<span class="hrefText">{!lCV.Title}</span>
+	            									</a>
+	                							</td>
+                							</tr>
+                    						<tr>
+                        						<td class="titleText">
+                            						Industry
+                        						</td>
+                        						<td>
+                            						{!lCV.Industry__c}
+                        						</td>
+                    						</tr>
+                						</table>
+			            			</li>
+		            			</apex:repeat></ol>
+		            		</apex:outputPanel>
+	        			</li>
+					</apex:repeat>
+				</ol>
+			</body>
+			<apex:actionFunction name="fetchPracticeFiles" action="{!fetchPracticeData}" reRender="formId" status="waitStatus">
+  				<apex:param name="fParam" value="" assignTo="{!strSelectedPractice}"/>
+			</apex:actionFunction>
+			<apex:actionFunction name="closePracticeData" action="{!closePracticeData}" reRender="formId" status="waitStatus">
+			</apex:actionFunction>
+			<apex:actionStatus id="waitStatus" style="align:center;">     
+				<apex:facet name="start">
+					<apex:image value="/img/loading.gif" title="Processing..."/>
+				</apex:facet>
+				<apex:facet name="stop"></apex:facet>
+			</apex:actionStatus>
+		</apex:form>
+	</html>
+</apex:page>

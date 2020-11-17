@@ -1,0 +1,97 @@
+<apex:page controller="BulletCardsViewController" sidebar="true" title="Battle Cards">
+    
+    <html>
+    <head>
+        <title>
+            Battle Cards
+        </title>
+    </head>
+    <style>
+    .sf1List {
+margin: 0;
+display: list-item;
+padding: 14px;
+border-bottom: solid 1px #cfd4d9;
+list-style: none;
+font-size: 16px;
+-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+color: rgb(60, 61, 62);
+}
+ 
+.sf1List:first-child {
+border-radius:4px 4px 0px 0px;
+}
+ 
+.sf1List:last-child {
+border-radius:0px 0px 4px 4px;
+border-bottom:none;
+}
+ 
+ol {
+background-color:rgb(248,248,248);
+list-style: none;
+margin: 0;
+padding: 0;
+margin-top:5px;
+border-radius:4px;
+border:solid 1px #cfd4d9;
+}
+ 
+.sf1List a {
+text-decoration: none;
+color: rgb(60, 61, 62);
+}
+.titleText {
+    color:#666666;
+    font-weight:bold;
+}
+.hrefText {
+    color:#668cff !important;
+}
+.boldText {
+	font-weight:bold;
+}
+    </style>
+    <body>
+    <h1 style="font-size:18px">Battle Cards</h1>
+    <ol>
+      <apex:repeat value="{!lstContentVersion}" var="lCV">
+         <li class="sf1List">
+            <table>
+                <tr>
+                    <td class="titleText">Title
+                </td>
+                <!-- </tr>
+                    <tr>  -->   
+                        <td>
+           <a href="/sfc/servlet.shepherd/version/download/{!lCV.Id}" title="{!lCV.Title}">
+                <span class="hrefText">{!lCV.Title}</span>
+            </a>
+                </td>
+                </tr>
+                <!-- </table>
+                <table>-->
+                	<tr>
+                        <td class="titleText">
+                            Practice
+                        </td>
+                        <td>
+                            {!lCV.Practice__c}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="titleText">
+                            Industry
+                        </td>
+                        <td>
+                            {!lCV.Industry__c}
+                        </td>
+                    </tr>
+                    
+                </table>
+         </li>
+         </apex:repeat>
+</ol>
+</body>
+    </html>
+</apex:page>

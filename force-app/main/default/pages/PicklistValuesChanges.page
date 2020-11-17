@@ -1,0 +1,7 @@
+<apex:page controller="PicklistValuesChangesController">
+	<apex:form >
+		<apex:pageBlock title="Get Field Details">
+		
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

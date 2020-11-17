@@ -1,0 +1,6 @@
+<aura:component implements="force:appHostable">
+    <body aura:id="content">
+    	<h1>First  Component</h1>
+         <ui:button label="Go to second comp"  press="{!c.gotoURL}"/>
+    </body>
+</aura:component>
